@@ -8,4 +8,4 @@ export const  connectDB = async () => {
     } catch (error) {
         console.log("MongoDB Connection Failed", error);
     }
-}
+};
