@@ -71,6 +71,7 @@ const ChatContainer = () => {
                 {formatMessageTime(message.createdAt)}
               </time>
             </div>
+            {/*
             <div className="chat-bubble flex flex-col">
               {message.image && (
                 <img
@@ -81,6 +82,7 @@ const ChatContainer = () => {
               )}
               {message.text && <p>{message.text}</p>}
             </div>
+*/}
           </div>
         ))}
       </div>
