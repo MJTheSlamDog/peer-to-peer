@@ -3,7 +3,7 @@ import { useChatStore } from "../store/useChatStore";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
 
-const MessageInput = () => {
+const MessageInput = () => {{}
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
@@ -57,14 +57,16 @@ const MessageInput = () => {
               alt="Preview"
               className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
             />
+            {/*
             <button
               onClick={removeImage}
               className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
               flex items-center justify-center"
               type="button"
-            >
+            > 
               <X className="size-3" />
             </button>
+            */}
           </div>
         </div>
       )}
@@ -85,6 +87,7 @@ const MessageInput = () => {
             ref={fileInputRef}
             onChange={handleImageChange}
           />
+          {/*
 
           <button
             type="button"
@@ -94,6 +97,7 @@ const MessageInput = () => {
           >
             <Image size={20} />
           </button>
+          */}
         </div>
         <button
           type="submit"
