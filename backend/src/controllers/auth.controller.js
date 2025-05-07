@@ -10,6 +10,12 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    const allowedDomain = "forgeacademy.co.za";
+    const emailDomain = email.split("@")[1];
+    if (emailDomain !== allowedDomain) {
+      return res.status(400).json({ message: `Only emails with the domain ${allowedDomain} are allowed` });
+    }
+
     if (password.length < 8 || 
       !/[A-Z]/.test(password) || 
       !/[a-z]/.test(password) || 
@@ -23,6 +29,7 @@ export const signup = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user) return res.status(400).json({ message: "Email already exists" });
+    
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
