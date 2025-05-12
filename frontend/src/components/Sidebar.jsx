@@ -31,7 +31,7 @@ const Sidebar = () => {
           <span className="font-medium hidden lg:block">Contacts</span>
         </div>
         */}
-        {/*
+        
         <div className="mt-3 hidden lg:flex items-center gap-2">
           
           <label className="cursor-pointer flex items-center gap-2">
@@ -46,7 +46,7 @@ const Sidebar = () => {
           
           <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
         </div>
-        */}
+        
       </div>
       
       

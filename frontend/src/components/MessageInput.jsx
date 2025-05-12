@@ -87,7 +87,7 @@ const MessageInput = () => {{}
             ref={fileInputRef}
             onChange={handleImageChange}
           />
-          {/*
+          
 
           <button
             type="button"
@@ -97,7 +97,7 @@ const MessageInput = () => {{}
           >
             <Image size={20} />
           </button>
-          */}
+          
         </div>
         <button
           type="submit"
