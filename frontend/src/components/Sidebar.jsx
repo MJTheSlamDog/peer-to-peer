@@ -32,7 +32,7 @@ const Sidebar = () => {
         </div>
         */}
         
-        <div className="mt-3 hidden lg:flex items-center gap-2">
+        <div className="lex justify-between mt-3 hidden lg:flex items-center gap-2">
           
           <label className="cursor-pointer flex items-center gap-2">
             <input
@@ -43,8 +43,17 @@ const Sidebar = () => {
             />
             <span className="text-sm">Show online only</span>
           </label>
+
+          <span>
+
+          <button
+  className="flex items-center justify-center w-8 h-8 text-2xl font-bold b-500 text-grey rounded-full hover:bg- transition"
+>
+  +
+</button>
+</span>
           
-          <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
+          
         </div>
         
       </div>
