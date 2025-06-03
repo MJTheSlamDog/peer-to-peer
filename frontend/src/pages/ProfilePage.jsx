@@ -5,8 +5,10 @@ import { Camera, Mail, User } from "lucide-react";
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
+  const [isImageChanged, setIsImageChanged] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null);
 
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -14,11 +16,25 @@ const ProfilePage = () => {
 
     reader.readAsDataURL(file);
 
-    reader.onload = async () => {
+    reader.onload = () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
-      await updateProfile({ profilePic: base64Image });
+      setIsImageChanged(true);
+      setSaveStatus(null); // Reset status on new image selection
     };
+  };
+
+  const handleSave = async () => {
+    if (!isImageChanged || !selectedImg) return;
+
+    try {
+      await updateProfile({ profilePic: selectedImg });
+      setIsImageChanged(false);
+      setSaveStatus({ type: "success", message: "Profile picture saved successfully!" });
+    } catch (error) {
+      console.error("Error saving profile picture:", error);
+      setSaveStatus({ type: "error", message: "Failed to save profile picture. Please try again." });
+    }
   };
 
   return (
@@ -31,11 +47,10 @@ const ProfilePage = () => {
           </div>
 
           {/* avatar upload section */}
-
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={selectedImg || authUser.profilePic || "/avatar.png"}
+                src={selectedImg || authUser?.profilePic || "/avatar.png"}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 "
               />
@@ -63,6 +78,28 @@ const ProfilePage = () => {
             <p className="text-sm text-zinc-400">
               {isUpdatingProfile ? "Uploading..." : "Click the camera icon to update your photo"}
             </p>
+            {isImageChanged && (
+              <button
+                onClick={handleSave}
+                disabled={isUpdatingProfile}
+                className={`
+                  px-4 py-2 bg-blue-500 text-white rounded-lg
+                  hover:bg-blue-600 transition-colors
+                  ${isUpdatingProfile ? "opacity-50 cursor-not-allowed" : ""}
+                `}
+              >
+                {isUpdatingProfile ? "Saving..." : "Save Profile Picture"}
+              </button>
+            )}
+            {saveStatus && (
+              <p
+                className={`text-sm ${
+                  saveStatus.type === "success" ? "text-green-500" : "text-red-500"
+                }`}
+              >
+                {saveStatus.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-6">
@@ -84,11 +121,11 @@ const ProfilePage = () => {
           </div>
 
           <div className="mt-6 bg-base-300 rounded-xl p-6">
-            <h2 className="text-lg font-medium  mb-4">Account Information</h2>
+            <h2 className="text-lg font-medium mb-4">Account Information</h2>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between py-2 border-b border-zinc-700">
                 <span>Member Since</span>
-                <span>{authUser.createdAt?.split("T")[0]}</span>
+                <span>{authUser?.createdAt?.split("T")[0]}</span>
               </div>
               <div className="flex items-center justify-between py-2">
                 <span>Account Status</span>
