@@ -10,10 +10,10 @@ export default {
   daisyui: {
     themes: [
      
-      "cupcake",
+     
       "corporate",
-      "business",
-      "winter",
+  "business",
+   
     ],
   },
 };
