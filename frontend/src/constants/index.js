@@ -1,8 +1,6 @@
 export const THEMES = [
   
-  "corporate",
-  "business",
-   
-  
+      "light",
+      "dark",
 
 ];

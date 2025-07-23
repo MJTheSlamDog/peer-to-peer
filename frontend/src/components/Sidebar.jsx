@@ -2,20 +2,46 @@ import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
- 
+
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
   const { onlineUsers } = useAuthStore();
- 
+
   const [searchTerm, setSearchTerm] = useState("");
- 
+  const [isCreatingGroup, setIsCreatingGroup] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [selectedMembers, setSelectedMembers] = useState([]);
+
   useEffect(() => {
     getUsers();
   }, [getUsers]);
 
   const filteredUsers = users.filter((user) =>
-    user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    (user.fullName || "")
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
   );
+
+  const handleCreateGroup = () => {
+    if (groupName && selectedMembers.length > 0) {
+      // Placeholder for backend API call to create group
+      const groupData = {
+        name: groupName,
+        members: selectedMembers,
+      };
+      // Example: await api.createGroup(groupData);
+      console.log("Group created:", groupData);
+      setGroupName("");
+      setSelectedMembers([]);
+      setIsCreatingGroup(false);
+    }
+  };
+
+  const toggleMemberSelection = (userId) => {
+    setSelectedMembers((prev) =>
+      prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
+    );
+  };
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -31,11 +57,48 @@ const Sidebar = () => {
             className="input input-sm w-full"
           />
           <button
-            className="flex items-center justify-center w-8 h-8 text-2xl font-bold b-500 text-grey rounded-full hover:bg- transition"
+            onClick={() => setIsCreatingGroup(!isCreatingGroup)}
+            className="flex items-center justify-center w-8 h-8 text-2xl font-bold text-500 text-grey rounded-full hover:bg- transition"
           >
             +
           </button>
         </div>
+        {isCreatingGroup && (
+          <div className="mt-4 space-y-2">
+            <input
+              type="text"
+              placeholder="Group name"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              className="input input-sm w-full"
+            />
+            <div className="max-h-40 overflow-y-auto border border-base-300 rounded p-2">
+              {filteredUsers.map((user) => (
+                <label key={user._id} className="flex items-center gap-2 p-1">
+                  <input
+                    type="checkbox"
+                    checked={selectedMembers.includes(user._id)}
+                    onChange={() => toggleMemberSelection(user._id)}
+                    className="checkbox"
+                  />
+                  <span>{user.fullName} {onlineUsers.includes(user._id) ? "(Online)" : "(Offline)"}</span>
+                </label>
+              ))}
+            </div>
+            <button
+              onClick={handleCreateGroup}
+              className="btn btn-sm w-full mt-2"
+            >
+              Create Group
+            </button>
+            <button
+              onClick={() => setIsCreatingGroup(false)}
+              className="btn btn-sm w-full mt-1"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="overflow-y-auto w-full py-3">
